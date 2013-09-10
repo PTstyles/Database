@@ -1,3 +1,5 @@
+
+/* Question 1 */ 
 SELECT 
   customers.cid, 
   customers.name, 
@@ -7,7 +9,7 @@ FROM
   public.customers;
 
 
-
+/* Question 2 */ 
 SELECT 
   agents.name, 
   agents.city
@@ -17,7 +19,7 @@ WHERE
   agents.name = 'Smith';
 
 
-
+/* Question 3 */ 
 SELECT 
   products.pid, 
   products.name, 
@@ -30,7 +32,7 @@ WHERE
 
 
 
-
+/* Question 4 */ 
 SELECT 
   orders.ordno, 
   orders.aid
@@ -39,7 +41,7 @@ FROM
 
 
 
-
+/* Question 5 */ 
 SELECT 
   customers.name, 
   customers.city
@@ -50,7 +52,7 @@ WHERE
 
 
 
-
+/* Question 6 */ 
 SELECT 
   agents.name
 FROM 
@@ -59,7 +61,7 @@ WHERE
   agents.city =  'New York'OR 
   agents.city = 'Newark';
 
-
+/* Question 7 */ 
 SELECT 
   products.pid, 
   products.name, 
@@ -75,7 +77,7 @@ WHERE
   products.priceusd <= '1';
 
 
-
+/* Question 8 */ 
 SELECT 
   orders.ordno, 
   orders.mon, 
@@ -93,7 +95,7 @@ WHERE
 
 
 
-
+/* Question 9 */ 
 SELECT 
   orders.ordno, 
   orders.mon, 
@@ -109,7 +111,7 @@ WHERE
   orders.dollars < '100' ;
 
 
-
+/* Question 10 */ 
 SELECT 
   orders.ordno, 
   orders.cid, 
