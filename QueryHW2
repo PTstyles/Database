@@ -1,0 +1,166 @@
+-- Question 1
+
+SELECT 
+  agents.city
+FROM 
+  agents
+where
+agents.aid in (
+select 
+orders.aid
+from 
+orders
+where
+orders.cid in (
+select 
+customers.cid
+from
+customers
+where
+customers.cid = 'c002'));
+
+-- Question 2
+
+select
+products.pid
+from 
+products
+where
+products.pid in (
+select 
+orders.pid
+from
+orders
+where
+orders.aid in (
+select
+agents.aid
+from
+agents
+where
+agents.aid in (
+select 
+orders.aid
+from
+orders
+where
+orders.cid in (
+select
+customers.cid
+from
+customers
+where
+customers.city = 'Kyoto'))));
+
+-- Question 3
+
+select
+cid, name
+from 
+Customers
+where 
+cid not in (
+select 
+cid
+from 
+Orders 
+where 
+aid in(
+select 
+aid 
+from 
+Orders
+where 
+aid = 'a03'))
+
+-- Question 4
+
+SELECT 
+  customers.cid, 
+  customers.name
+FROM 
+  public.orders, 
+  public.customers
+WHERE 
+  orders.pid = 'p01' AND orders.pid = 'p07';
+
+
+  -- Question 5
+
+  SELECT 
+products.pid
+FROM 
+products
+WHERE 
+products.pid in (
+select
+orders.pid
+from
+orders
+where
+orders.aid in (
+select
+agents.aid
+from
+agents
+where
+agents.aid = 'a03'));
+
+-- Question 6
+
+SELECT 
+customers.name,
+customers.discount
+FROM 
+customers
+WHERE 
+customers.cid in (
+select
+orders.cid
+from
+orders
+where
+orders.aid in (
+select
+agents.aid
+from
+agents
+where
+agents.city = 'Dallas' OR agents.city = 'Duluth' ));
+
+-- Question 8
+
+SELECT 
+customers.name
+FROM 
+customers
+WHERE 
+customers.discount in (
+select
+customers.discount
+from
+customers
+where
+customers.city = 'Dallas' OR customers.city = 'Duluth')
+
+-- Question 9
+
+select
+customers.cid
+from
+customers
+where
+customers.cid not in (
+select
+orders.cid
+from
+orders
+where
+orders.aid in (
+select
+agents.aid
+from
+agents
+where
+agents.aid = 'a03'))
+
