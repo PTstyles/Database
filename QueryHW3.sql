@@ -84,3 +84,18 @@ select distinct c.name
 from  orders o right outer join customers c
      on c.cid = o.cid 
      where o.cid is null 
+
+-- Question 7
+
+select distinct c.name , a.name 
+from orders o , agents a, customers c
+where o.aid = a.aid and 
+o.cid = c.cid and
+a.city = c.city
+
+-- Question 8
+
+select distinct c.name , a.name , c.city
+from customers c, agents a
+where
+c.city = a.city
