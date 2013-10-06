@@ -1,4 +1,5 @@
 -- Paul McCusker
+
 -- Question 1
 
 SELECT agents.city
@@ -171,3 +172,4 @@ WHERE o.cid = c.cid
 
   UPDATE orders
   SET dollars = 10 WHERE dollars = 500;
+
