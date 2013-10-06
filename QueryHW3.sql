@@ -1,101 +1,143 @@
 -- Paul McCusker
 -- Question 1
-select
-agents.city
-from
-agents
-where
-agents.aid in (
-select 
-orders.aid
-from
-orders
-where
-orders.cid in (
-select
-customers.cid
-from
-customers
-where
-customers.cid = 'c002'));
 
+SELECT agents.city
+FROM agents
+WHERE agents.aid IN
+    (SELECT orders.aid
+     FROM orders
+     WHERE orders.cid IN
+         (SELECT customers.cid
+          FROM customers
+          WHERE customers.cid = 'c002'));
 
--- Questions 2
+ -- Questions 2
 
-SELECT 
-  agents.city
-FROM 
-  public.agents, 
-  public.customers, 
-  public.orders
-WHERE 
-  agents.aid = orders.aid AND
-  orders.cid = customers.cid AND
-  customers.cid = 'c002';
+SELECT agents.city
+FROM public.agents,
+     public.customers,
+     public.orders
+WHERE agents.aid = orders.aid
+  AND orders.cid = customers.cid
+  AND customers.cid = 'c002';
 
-  -- Question 3 
+ -- Question 3
 
-  select distinct pid
-from Products
-where pid in
-	(select pid
-	from Orders
-	where aid in
+SELECT DISTINCT pid
+FROM Products
+WHERE pid IN
+    (SELECT pid
+     FROM Orders
+     WHERE aid IN
+         (SELECT aid
+          FROM Orders
+          WHERE aid IN
+              (SELECT aid
+               FROM Agents
+               WHERE cid IN
+                   (SELECT cid
+                    FROM Customers
+                    WHERE city = 'Kyoto'))));
 
-	(select aid 
-	from Orders
-	where aid in
+ -- Question 4
 
-	(select aid
-	from Agents
-	where cid in
+SELECT DISTINCT o2.pid
+FROM Orders o1,
+     orders o2,
+     Customers
+WHERE o1.cid = customers.cid
+  AND o1.aid = o2.aid
+  AND customers.city = 'Kyoto';
 
-	(select cid
-	from Customers
-	where city = 'Kyoto')
-	)
-	)
-	)
+ -- Question 5
 
--- Question 4
+SELECT DISTINCT name
+FROM customers
+WHERE cid NOT IN
+    (SELECT cid
+     FROM orders);
 
-select distinct  o2.pid 
-from  Orders o1, orders o2, Customers
-where o1.cid = customers.cid 
-and   o1.aid = o2.aid
-and   customers.city = 'Kyoto'
+ -- Question 6
 
--- Question 5
+SELECT DISTINCT c.name
+FROM orders o
+RIGHT OUTER JOIN customers c ON c.cid = o.cid
+WHERE o.cid IS NULL -- Question 7
 
-select distinct 
-name 
-from 
-customers
-where 
-cid not in
-(
-	select cid
-    from orders
-    )
+  SELECT DISTINCT c.name ,
+                  a.name
+  FROM orders o ,
+       agents a,
+       customers c WHERE o.aid = a.aid
+  AND o.cid = c.cid
+  AND a.city = c.city;
 
--- Question 6
+ -- Question 8
 
-select distinct c.name
-from  orders o right outer join customers c
-     on c.cid = o.cid 
-     where o.cid is null 
+SELECT DISTINCT c.name ,
+                a.name ,
+                c.city
+FROM customers c,
+     agents a
+WHERE c.city = a.city;
 
--- Question 7
+ -- Question 9
 
-select distinct c.name , a.name 
-from orders o , agents a, customers c
-where o.aid = a.aid and 
-o.cid = c.cid and
-a.city = c.city
+SELECT DISTINCT c.name,
+                c.city
+FROM customers c
+WHERE city IN
+    (SELECT city
+     FROM products
+     GROUP BY city
+     ORDER BY count(city) ASC LIMIT 1);
 
--- Question 8
+ -- Question 10
 
-select distinct c.name , a.name , c.city
-from customers c, agents a
-where
-c.city = a.city
+SELECT DISTINCT c.name,
+                c.city
+FROM customers c
+WHERE city IN
+    (SELECT city
+     FROM products
+     GROUP BY city
+     ORDER BY count(city) DESC LIMIT 1);
+
+ -- Question 11
+ -- Question 12
+
+SELECT p.name
+FROM products p
+GROUP BY name HAVING AVG (priceUSD) >
+  (SELECT AVG(priceUSD)
+   FROM products) -- Question 13
+
+SELECT c.name,
+       o.pid,
+       o.dollars
+FROM customers c
+INNER JOIN orders o ON c.cid = o.cid
+INNER JOIN products p ON p.pid = o.pid
+ORDER BY o.dollars DESC -- Question 14
+
+SELECT c.name,
+       coalesce (SUM (o.dollars), 0)
+FROM customers c
+LEFT OUTER JOIN orders o ON c.cid = o.cid
+GROUP BY c.cid
+ORDER BY c.name ASC -- Question 15
+
+SELECT c.name,
+       a.name,
+       p.pid
+FROM customers c,
+     agents a ,
+     products p,
+     orders o
+WHERE o.cid = c.cid
+  AND o.aid = a.aid
+  AND p.pid = o.pid
+  AND a.city = 'New York' 
+
+ -- Question 16
+ -- Question17
