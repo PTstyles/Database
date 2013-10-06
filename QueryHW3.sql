@@ -104,13 +104,28 @@ WHERE city IN
      ORDER BY count(city) DESC LIMIT 1);
 
  -- Question 11
+
+SELECT c.name,
+       c.city
+FROM customers c
+WHERE city IN
+    (SELECT city
+     FROM products
+     GROUP BY city HAVING count(city) IN
+       (SELECT count(city)
+        FROM products
+        GROUP BY city
+        ORDER BY count(city) DESC LIMIT 1)) 
+
  -- Question 12
 
-SELECT p.name
-FROM products p
+  SELECT p.name
+  FROM products p
 GROUP BY name HAVING AVG (priceUSD) >
   (SELECT AVG(priceUSD)
-   FROM products) -- Question 13
+   FROM products) 
+
+  -- Question 13
 
 SELECT c.name,
        o.pid,
@@ -118,14 +133,18 @@ SELECT c.name,
 FROM customers c
 INNER JOIN orders o ON c.cid = o.cid
 INNER JOIN products p ON p.pid = o.pid
-ORDER BY o.dollars DESC -- Question 14
+ORDER BY o.dollars DESC 
+
+-- Question 14
 
 SELECT c.name,
        coalesce (SUM (o.dollars), 0)
 FROM customers c
 LEFT OUTER JOIN orders o ON c.cid = o.cid
 GROUP BY c.cid
-ORDER BY c.name ASC -- Question 15
+ORDER BY c.name ASC 
+
+-- Question 15
 
 SELECT c.name,
        a.name,
@@ -139,5 +158,16 @@ WHERE o.cid = c.cid
   AND p.pid = o.pid
   AND a.city = 'New York' 
 
- -- Question 16
- -- Question17
+  -- Question 16
+
+  SELECT o.ordno, o.dollars, (p.priceUSD * o.qty) - ((p.priceUSD * o.qty) * (c.discount/ 100))
+  FROM orders o,
+       products p,
+       customers c WHERE c.cid = o.cid
+  AND p.pid = o.pid
+  AND o.dollars <> (p.priceUSD * o.qty) - ((p.priceUSD * o.qty) * (c.discount/ 100)) 
+
+  -- Question17
+
+  UPDATE orders
+  SET dollars = 10 WHERE dollars = 500;
