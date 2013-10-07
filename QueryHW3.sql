@@ -102,7 +102,7 @@ WHERE city IN
     (SELECT city
      FROM products
      GROUP BY city
-     ORDER BY count(city) DESC LIMIT 1);
+     ORDER BY count(city) DESC LIMIT 1); -- takes a single city 
 
  -- Question 11
 
